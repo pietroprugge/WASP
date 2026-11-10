@@ -1,0 +1,31 @@
+Assignment 2 - Task D: Random Forest Hyperparameters Comparison
+=================================================================
+
+Combination 1:
+  - Hyperparameters: n_estimators=100, max_depth=10
+  - Accuracy(Optimal Trehshold): 0.8730
+  - Confusion Matrix:
+      TN= 73  FP= 22
+      FN=  2  TP= 92
+
+Combination 2:
+  - Hyperparameters: n_estimators=100, max_depth=25
+  - Accuracy(Optimal Trehshold): 0.8677
+  - Confusion Matrix:
+      TN= 73  FP= 22
+      FN=  3  TP= 91
+
+Combination 3:
+  - Hyperparameters: n_estimators=300, max_depth=15
+  - Accuracy(Optimal Trehshold): 0.8624
+  - Confusion Matrix:
+      TN= 71  FP= 24
+      FN=  2  TP= 92
+
+Combination 4:
+  - Hyperparameters: n_estimators=500, max_depth=None
+  - Accuracy(Optimal Trehshold): 0.8624
+  - Confusion Matrix:
+      TN= 70  FP= 25
+      FN=  1  TP= 93
+
