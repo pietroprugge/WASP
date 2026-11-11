@@ -1,5 +1,5 @@
 import importlib
-
+from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 import setuptools  # noqa: F401  # Provides distutils compatibility for batman.
@@ -54,27 +54,27 @@ class Transit:
         self.flux = self.model.light_curve(self.params)
         return self.flux
 
-    def plot_light_curve(self, output_file='wasp39b_assignment1_taskF', show=False):
+    def plot_light_curve(self,name_files, output_file='wasp39b', show=False, one_output = False):
         """
         Plot and save the transit light curve.
         
         Parameters
         ----------
         output_file : str, optional
-            Output filename for the plot (default: 'wasp39b_assignment1_taskF')
+            Output filename for the plot (default: 'wasp39b')
         """
         if not hasattr(self, 'flux'):
             self.compute_light_curve()
-        
         plt.figure(figsize=(8, 5))
-        plt.plot(self.t * 24, self.flux, label='Batman model (WASP-39 b)', color='navy', lw=2)
+        plt.plot(self.t * 24, self.flux, label=f'Batman model {name_files[0]}', color='navy', lw=2)
         plt.xlabel("Hours from mid-transit")
         plt.ylabel("Normalized Flux")
-        plt.title("Theoretical Light Curve for WASP-39 b")
+        plt.title(f"Theoretical Light Curve {name_files[0]} ")
         plt.grid(True, linestyle='--', alpha=0.6)
         plt.legend()
         plt.tight_layout()
-        plt.savefig(output_file, dpi=300) 
+        if (one_output == False):
+            plt.savefig(output_file, dpi=300) 
         if show:
             plt.show()
         print(f"Light curve saved to {output_file}")
@@ -105,3 +105,29 @@ class Transit:
             print("no error for a",self.params.limb_dark,"limb darkening model")
         else:
             err = self.model.calc_err(plot = True)
+            return err
+
+    #If we want to create a single plot
+    def plot_one_figure(self, flux,name_files, output_file='wasp39b', show=False):
+            """
+            Plot and save the transit light curve for multiple planets
+            
+            Parameters
+            ----------
+            output_file : str, optional
+                Output filename for the plot (default: 'wasp39b')
+            """
+            plt.figure(figsize=(8, 5))
+            for i in range(len(flux)):
+                plt.plot(self.t * 24, flux[i], label=f'Batman model {name_files[i]}', lw=2)
+            plt.xlabel("Hours from mid-transit")
+            plt.ylabel("Normalized Flux")
+            plt.title(f"Theoretical Light Curve")
+            plt.grid(True, linestyle='--', alpha=0.6)
+            plt.legend()
+            plt.tight_layout()
+            plt.savefig(output_file, dpi=300) 
+            if show:
+                plt.show()
+            print(f"Light curve saved to {output_file}")
+        
