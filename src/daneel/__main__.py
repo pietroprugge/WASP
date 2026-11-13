@@ -4,7 +4,7 @@ from daneel.detection import Transit
 from daneel.detection import TransitModel
 from daneel.parameters import Parameters
 from pathlib import Path
-
+from daneel.detection import RandomForestClassifier
 
 def main():
     parser = argparse.ArgumentParser(description="Model and analyse exoplanet transits.")
@@ -21,7 +21,7 @@ def main():
 
     actions = parser.add_mutually_exclusive_group(required=True)
     actions.add_argument("-t", "--transit", action="store_true", help="Plot a transit light curve")
-    actions.add_argument("-d", "--detect", action="store_true", help="Run exoplanet detection")
+    actions.add_argument("-d", "--detection", type = str, choices = ["rf","cnn"] , help="Run exoplanet detection")
     actions.add_argument("-a", "--atmosphere", action="store_true", help="Run atmospheric characterisation")
     parser.add_argument("-o", "--output",nargs = "+", default="lc.png", help="Output image for --transit")
 
@@ -61,8 +61,15 @@ def main():
                 transit = Transit(input_pars[j]['transit'])
                 transit.plot_light_curve(name_files,args.output[j])
 
+
     elif args.detect:
-        parser.error("detection is not implemented yet; use --transit")
+        for i in range(s):
+            if args.detection == "rf":
+                rf = RandomForestClassifier(input_pars[i])
+                rf.run()
+            else: 
+                parser.error("detection CNN is not implemented yet; use --transit")
+            
     elif args.atmosphere:
         parser.error("atmospheric characterisation is not implemented yet; use --transit")
 
