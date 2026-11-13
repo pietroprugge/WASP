@@ -62,7 +62,7 @@ def main():
                 transit.plot_light_curve(name_files,args.output[j])
 
 
-    elif args.detect:
+    elif args.detection:
         for i in range(s):
             if args.detection == "rf":
                 rf = RandomForestClassifier(input_pars[i])
