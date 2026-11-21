@@ -16,11 +16,18 @@ classifier:
   random_state: 42
   rf:
     n_estimators: 500
-    max_depth: null          
-    min_samples_leaf: 1
+    max_depth: 50          
+    min_samples_leaf: 5
     max_features: "sqrt"
     bootstrap: true
-    class_weight: null
+    class_weight: null #no augumentation
     n_jobs: -1
     oob_score: true
+  tree:
+    max_depth: 1
+    min_samples_split: 12
+    min_samples_leaf: 20
+    ccp_alpha: 0.01
+    class_weight: null #no augumentation
+
 

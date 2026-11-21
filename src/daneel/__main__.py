@@ -5,6 +5,7 @@ from daneel.detection import TransitModel
 from daneel.parameters import Parameters
 from pathlib import Path
 from daneel.detection import RandomForestClassifier
+from daneel.detection import TreemodelClassifier
 
 def main():
     parser = argparse.ArgumentParser(description="Model and analyse exoplanet transits.")
@@ -21,7 +22,8 @@ def main():
 
     actions = parser.add_mutually_exclusive_group(required=True)
     actions.add_argument("-t", "--transit", action="store_true", help="Plot a transit light curve")
-    actions.add_argument("-d", "--detection", type = str, choices = ["rf","cnn"] , help="Run exoplanet detection")
+    actions.add_argument("-b", "--best", nargs = "+", type = str, choices = ["rf","cnn","tree"] , help="Finding best hyperparamters for our model")
+    actions.add_argument("-d", "--detection", nargs = "+", type = str, choices = ["rf","cnn","tree","show"] , help="Run exoplanet detection")
     actions.add_argument("-a", "--atmosphere", action="store_true", help="Run atmospheric characterisation")
     parser.add_argument("-o", "--output",nargs = "+", default="lc.png", help="Output image for --transit")
 
@@ -63,13 +65,46 @@ def main():
 
 
     elif args.detection:
-        for i in range(s):
-            if args.detection == "rf":
-                rf = RandomForestClassifier(input_pars[i])
-                rf.run()
-            else: 
-                parser.error("detection CNN is not implemented yet; use --transit")
-            
+        show = False
+        if "show" in args.detection:
+            show = True
+            if(len(args.detection) == 1): parser.error("You need to specify the model in order to show something")
+            args.detection.remove("show")
+        if(len(args.detection) != s and len(args.detection)!=1 and s !=1):
+            parser.error("The number of input files is different compared to the number of output files")
+        else:
+            for i in range(max(len(args.detection),s)):
+                if(len(args.detection)==1): l = 0
+                else: l = i
+                if(s == 1): c = 0
+                else: c = i
+                if args.detection[l] == "rf":
+                    rf = RandomForestClassifier(input_pars[c])
+                    rf.run(show,name_files[c])
+                elif (args.detection[l] == "tree"):
+                    tree = TreemodelClassifier(input_pars[c])
+                    tree.run(show,name_files[c])
+                else:
+                    parser.error("detection CNN is not implemented yet; use --transit")
+
+    elif args.best:
+            if(len(args.best) != s and len(args.best)!=1 and s !=1):
+                parser.error("The number of input files is different compared to the number of output files")
+            else:
+                for i in range(max(len(args.best),s)):
+                    if(len(args.best)==1): l = 0
+                    else: l = i
+                    if(s == 1): c = 0
+                    else: c = i
+                    if args.best[l] == "rf":
+                        rf = RandomForestClassifier(input_pars[c])
+                        rf.evaluate_best_hyperparameters()
+                    elif (args.best[l] == "tree"):
+                        tree = TreemodelClassifier(input_pars[c])
+                        tree.evaluate_best_hyperparameters()
+                    else:
+                        parser.error("detection CNN is not implemented yet; use --transit")
+
     elif args.atmosphere:
         parser.error("atmospheric characterisation is not implemented yet; use --transit")
 
