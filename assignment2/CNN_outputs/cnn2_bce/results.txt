@@ -1,0 +1,26 @@
+Experiment: cnn2_bce
+
+Parameters: 667393
+Optimal threshold: 0.978736
+
+ROC-AUC: 0.894961
+Accuracy (threshold=0.5): 0.592593
+Accuracy (optimal): 0.862434
+Precision (Planet): 0.854167
+Recall (Planet): 0.872340
+F1-score (Planet): 0.863158
+
+Confusion matrix:
+[[81 14]
+ [12 82]]
+
+Classification report:
+              precision    recall  f1-score   support
+
+  Non-Planet       0.87      0.85      0.86        95
+      Planet       0.85      0.87      0.86        94
+
+    accuracy                           0.86       189
+   macro avg       0.86      0.86      0.86       189
+weighted avg       0.86      0.86      0.86       189
+

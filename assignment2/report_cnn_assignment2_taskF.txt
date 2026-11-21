@@ -1,0 +1,305 @@
+ASSIGNMENT 2 - TASK F
+CNN ARCHITECTURES AND CLASSIFICATION RESULTS
+============================================================
+
+CNN1_FOCAL
+------------------------------------------------------------
+
+Architecture:
+Input shape: (1000, 1)
+Total parameters: 421249
+  1. Conv1D: 64 filters, kernel=[3]
+  2. BatchNormalization
+  3. MaxPooling1D: pool=[2]
+  4. Dropout: 0.3
+  5. Conv1D: 128 filters, kernel=[3]
+  6. BatchNormalization
+  7. MaxPooling1D: pool=[2]
+  8. Dropout: 0.3
+  9. Conv1D: 256 filters, kernel=[3]
+  10. BatchNormalization
+  11. GlobalAveragePooling1D
+  12. Dropout: 0.4
+  13. Dense: 512 units, activation=relu
+  14. Dropout: 0.2
+  15. Dense: 256 units, activation=relu
+  16. Dropout: 0.2
+  17. Dense: 128 units, activation=relu
+  18. Dropout: 0.2
+  19. Dense: 1 units, activation=sigmoid
+
+Confusion matrix:
+                  Predicted
+                 Non-Planet  Planet
+True Non-Planet       80       15
+True Planet            9       85
+
+Precision (Non-Planet): 0.8989
+Precision (Planet):     0.8500
+
+============================================================
+
+CNN1_BCE
+------------------------------------------------------------
+
+Architecture:
+Input shape: (1000, 1)
+Total parameters: 421249
+  1. Conv1D: 64 filters, kernel=[3]
+  2. BatchNormalization
+  3. MaxPooling1D: pool=[2]
+  4. Dropout: 0.3
+  5. Conv1D: 128 filters, kernel=[3]
+  6. BatchNormalization
+  7. MaxPooling1D: pool=[2]
+  8. Dropout: 0.3
+  9. Conv1D: 256 filters, kernel=[3]
+  10. BatchNormalization
+  11. GlobalAveragePooling1D
+  12. Dropout: 0.4
+  13. Dense: 512 units, activation=relu
+  14. Dropout: 0.2
+  15. Dense: 256 units, activation=relu
+  16. Dropout: 0.2
+  17. Dense: 128 units, activation=relu
+  18. Dropout: 0.2
+  19. Dense: 1 units, activation=sigmoid
+
+Confusion matrix:
+                  Predicted
+                 Non-Planet  Planet
+True Non-Planet       76       19
+True Planet           13       81
+
+Precision (Non-Planet): 0.8539
+Precision (Planet):     0.8100
+
+============================================================
+
+CNN2_FOCAL
+------------------------------------------------------------
+
+Architecture:
+Input shape: (50, 20, 1)
+Total parameters: 667393
+  1. Conv2D: 64 filters, kernel=[3, 3]
+  2. BatchNormalization
+  3. MaxPooling2D: pool=[2, 2]
+  4. Dropout: 0.3
+  5. Conv2D: 128 filters, kernel=[3, 3]
+  6. BatchNormalization
+  7. MaxPooling2D: pool=[2, 2]
+  8. Dropout: 0.3
+  9. Conv2D: 256 filters, kernel=[3, 3]
+  10. BatchNormalization
+  11. GlobalAveragePooling2D
+  12. Dropout: 0.4
+  13. Dense: 512 units, activation=relu
+  14. Dropout: 0.2
+  15. Dense: 256 units, activation=relu
+  16. Dropout: 0.2
+  17. Dense: 128 units, activation=relu
+  18. Dropout: 0.2
+  19. Dense: 1 units, activation=sigmoid
+
+Confusion matrix:
+                  Predicted
+                 Non-Planet  Planet
+True Non-Planet       82       13
+True Planet            7       87
+
+Precision (Non-Planet): 0.9213
+Precision (Planet):     0.8700
+
+============================================================
+
+CNN2_BCE
+------------------------------------------------------------
+
+Architecture:
+Input shape: (50, 20, 1)
+Total parameters: 667393
+  1. Conv2D: 64 filters, kernel=[3, 3]
+  2. BatchNormalization
+  3. MaxPooling2D: pool=[2, 2]
+  4. Dropout: 0.3
+  5. Conv2D: 128 filters, kernel=[3, 3]
+  6. BatchNormalization
+  7. MaxPooling2D: pool=[2, 2]
+  8. Dropout: 0.3
+  9. Conv2D: 256 filters, kernel=[3, 3]
+  10. BatchNormalization
+  11. GlobalAveragePooling2D
+  12. Dropout: 0.4
+  13. Dense: 512 units, activation=relu
+  14. Dropout: 0.2
+  15. Dense: 256 units, activation=relu
+  16. Dropout: 0.2
+  17. Dense: 128 units, activation=relu
+  18. Dropout: 0.2
+  19. Dense: 1 units, activation=sigmoid
+
+Confusion matrix:
+                  Predicted
+                 Non-Planet  Planet
+True Non-Planet       81       14
+True Planet           12       82
+
+Precision (Non-Planet): 0.8710
+Precision (Planet):     0.8542
+
+============================================================
+
+CNN3_FOCAL
+------------------------------------------------------------
+
+Architecture:
+Input shape: (1000, 1)
+Total parameters: 243137
+  1. Conv1D: 32 filters, kernel=[7]
+  2. BatchNormalization
+  3. Activation: relu
+  4. MaxPooling1D: pool=[2]
+  5. Conv1D: 64 filters, kernel=[5]
+  6. BatchNormalization
+  7. Activation: relu
+  8. MaxPooling1D: pool=[2]
+  9. Conv1D: 128 filters, kernel=[5]
+  10. BatchNormalization
+  11. Activation: relu
+  12. MaxPooling1D: pool=[2]
+  13. Dropout: 0.2
+  14. Conv1D: 128 filters, kernel=[3]
+  15. BatchNormalization
+  16. Activation: relu
+  17. Conv1D: 256 filters, kernel=[3]
+  18. BatchNormalization
+  19. Activation: relu
+  20. Dropout: 0.25
+  21. GlobalAveragePooling1D
+  22. Dense: 128 units, activation=relu
+  23. Dropout: 0.3
+  24. Dense: 64 units, activation=relu
+  25. Dropout: 0.2
+  26. Dense: 1 units, activation=sigmoid
+
+Confusion matrix:
+                  Predicted
+                 Non-Planet  Planet
+True Non-Planet       76       19
+True Planet            6       88
+
+Precision (Non-Planet): 0.9268
+Precision (Planet):     0.8224
+
+============================================================
+
+CNN3_BCE
+------------------------------------------------------------
+
+Architecture:
+Input shape: (1000, 1)
+Total parameters: 243137
+  1. Conv1D: 32 filters, kernel=[7]
+  2. BatchNormalization
+  3. Activation: relu
+  4. MaxPooling1D: pool=[2]
+  5. Conv1D: 64 filters, kernel=[5]
+  6. BatchNormalization
+  7. Activation: relu
+  8. MaxPooling1D: pool=[2]
+  9. Conv1D: 128 filters, kernel=[5]
+  10. BatchNormalization
+  11. Activation: relu
+  12. MaxPooling1D: pool=[2]
+  13. Dropout: 0.2
+  14. Conv1D: 128 filters, kernel=[3]
+  15. BatchNormalization
+  16. Activation: relu
+  17. Conv1D: 256 filters, kernel=[3]
+  18. BatchNormalization
+  19. Activation: relu
+  20. Dropout: 0.25
+  21. GlobalAveragePooling1D
+  22. Dense: 128 units, activation=relu
+  23. Dropout: 0.3
+  24. Dense: 64 units, activation=relu
+  25. Dropout: 0.2
+  26. Dense: 1 units, activation=sigmoid
+
+Confusion matrix:
+                  Predicted
+                 Non-Planet  Planet
+True Non-Planet       81       14
+True Planet            6       88
+
+Precision (Non-Planet): 0.9310
+Precision (Planet):     0.8627
+
+============================================================
+
+CNN4_FOCAL
+------------------------------------------------------------
+
+Architecture:
+Input shape: (50, 20, 1)
+Total parameters: 100097
+  1. Conv2D: 64 filters, kernel=[3, 3]
+  2. BatchNormalization
+  3. Activation: relu
+  4. MaxPooling2D: pool=[2, 2]
+  5. Conv2D: 128 filters, kernel=[3, 3]
+  6. BatchNormalization
+  7. Activation: relu
+  8. MaxPooling2D: pool=[2, 2]
+  9. Dropout: 0.25
+  10. GlobalAveragePooling2D
+  11. Dense: 128 units, activation=relu
+  12. Dropout: 0.3
+  13. Dense: 64 units, activation=relu
+  14. Dropout: 0.2
+  15. Dense: 1 units, activation=sigmoid
+
+Confusion matrix:
+                  Predicted
+                 Non-Planet  Planet
+True Non-Planet       78       17
+True Planet            8       86
+
+Precision (Non-Planet): 0.9070
+Precision (Planet):     0.8350
+
+============================================================
+
+CNN4_BCE
+------------------------------------------------------------
+
+Architecture:
+Input shape: (50, 20, 1)
+Total parameters: 100097
+  1. Conv2D: 64 filters, kernel=[3, 3]
+  2. BatchNormalization
+  3. Activation: relu
+  4. MaxPooling2D: pool=[2, 2]
+  5. Conv2D: 128 filters, kernel=[3, 3]
+  6. BatchNormalization
+  7. Activation: relu
+  8. MaxPooling2D: pool=[2, 2]
+  9. Dropout: 0.25
+  10. GlobalAveragePooling2D
+  11. Dense: 128 units, activation=relu
+  12. Dropout: 0.3
+  13. Dense: 64 units, activation=relu
+  14. Dropout: 0.2
+  15. Dense: 1 units, activation=sigmoid
+
+Confusion matrix:
+                  Predicted
+                 Non-Planet  Planet
+True Non-Planet       75       20
+True Planet            5       89
+
+Precision (Non-Planet): 0.9375
+Precision (Planet):     0.8165
+
+============================================================

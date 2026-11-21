@@ -1,0 +1,26 @@
+Experiment: cnn2_focal
+
+Parameters: 667393
+Optimal threshold: 0.758036
+
+ROC-AUC: 0.912654
+Accuracy (threshold=0.5): 0.597884
+Accuracy (optimal): 0.894180
+Precision (Planet): 0.870000
+Recall (Planet): 0.925532
+F1-score (Planet): 0.896907
+
+Confusion matrix:
+[[82 13]
+ [ 7 87]]
+
+Classification report:
+              precision    recall  f1-score   support
+
+  Non-Planet       0.92      0.86      0.89        95
+      Planet       0.87      0.93      0.90        94
+
+    accuracy                           0.89       189
+   macro avg       0.90      0.89      0.89       189
+weighted avg       0.90      0.89      0.89       189
+
