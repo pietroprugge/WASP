@@ -1,0 +1,28 @@
+classifier:
+  path: "data/tess_data.csv"
+  n_bins: 1000
+  samples_per_class: 350
+  use_scaler: True
+  random_state: 42
+  rf:
+    n_estimators: 500
+    max_depth: 50          
+    min_samples_leaf: 5
+    max_features: "sqrt"
+    bootstrap: true
+    class_weight: null #no augumentation
+    n_jobs: -1
+    oob_score: true
+  tree:
+    max_depth: 1
+    min_samples_split: 12
+    min_samples_leaf: 20
+    ccp_alpha: 0.01
+    class_weight: null #no augumentation
+  cnn:
+    cnn_type: "cnn1" #we can choose between 4 different cnn to use 
+    reshape: 50 #we have a reshape in case we choose the 2 and 4 cnn where we are using a 2 dimension convolusionar neural network
+    epochs: 200 #how expensive we want our method
+    loss: "bce" #we can either choose between focal and bce
+    gamma: 2.5 #parameter used only when we activate the focal option
+    alpha: 0.75 #parameter used only when we activate the focal option

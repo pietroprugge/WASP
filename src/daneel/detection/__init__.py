@@ -3,4 +3,4 @@ from .transit_model import *
 from .transit import Transit
 from .classifiers import RandomForestClassifier
 from .classifiers import TreemodelClassifier
-
+from .classifiers import CnnClassifier

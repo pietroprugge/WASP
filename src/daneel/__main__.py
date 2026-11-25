@@ -6,6 +6,8 @@ from daneel.parameters import Parameters
 from pathlib import Path
 from daneel.detection import RandomForestClassifier
 from daneel.detection import TreemodelClassifier
+from daneel.detection import CnnClassifier
+
 
 def main():
     parser = argparse.ArgumentParser(description="Model and analyse exoplanet transits.")
@@ -84,8 +86,11 @@ def main():
                 elif (args.detection[l] == "tree"):
                     tree = TreemodelClassifier(input_pars[c])
                     tree.run(show,name_files[c])
+                elif(args.detection[l] == "cnn"):
+                    cnn = CnnClassifier(input_pars[c])
+                    cnn.run(show,name_files[c])
                 else:
-                    parser.error("detection CNN is not implemented yet; use --transit")
+                    parser.error("Method not implemented yet, pls come back layer or use cnn/tree/rf")
 
     elif args.best:
             if(len(args.best) != s and len(args.best)!=1 and s !=1):
@@ -102,8 +107,6 @@ def main():
                     elif (args.best[l] == "tree"):
                         tree = TreemodelClassifier(input_pars[c])
                         tree.evaluate_best_hyperparameters()
-                    else:
-                        parser.error("detection CNN is not implemented yet; use --transit")
 
     elif args.atmosphere:
         parser.error("atmospheric characterisation is not implemented yet; use --transit")
