@@ -119,7 +119,8 @@ class Transit:
             """
             plt.figure(figsize=(8, 5))
             for i in range(len(flux)):
-                plt.plot(self.t * 24, flux[i], label='Batman model of WASP-39b', lw=2)
+                    curve_label = Path(name_files[i]).stem.replace("_", " ")
+                    plt.plot(self.t * 24, flux[i], label=curve_label, lw=2)
             plt.xlabel("Hours from mid-transit")
             plt.ylabel("Normalized Flux")
             plt.title("Theoretical Light Curve of WASP-39b")
@@ -130,4 +131,4 @@ class Transit:
             if show:
                 plt.show()
             print(f"Light curve saved to {output_file}")
-        
+    
