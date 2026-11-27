@@ -66,10 +66,10 @@ class Transit:
         if not hasattr(self, 'flux'):
             self.compute_light_curve()
         plt.figure(figsize=(8, 5))
-        plt.plot(self.t * 24, self.flux, label=f'Batman model {name_files[0]}', color='navy', lw=2)
+        plt.plot(self.t * 24, self.flux, label='Batman model of WASP-39b', color='navy', lw=2)
         plt.xlabel("Hours from mid-transit")
         plt.ylabel("Normalized Flux")
-        plt.title(f"Theoretical Light Curve {name_files[0]} ")
+        plt.title("Theoretical Light Curve of WASP-39b")
         plt.grid(True, linestyle='--', alpha=0.6)
         plt.legend()
         plt.tight_layout()
@@ -119,10 +119,10 @@ class Transit:
             """
             plt.figure(figsize=(8, 5))
             for i in range(len(flux)):
-                plt.plot(self.t * 24, flux[i], label=f'Batman model {name_files[i]}', lw=2)
+                plt.plot(self.t * 24, flux[i], label='Batman model of WASP-39b', lw=2)
             plt.xlabel("Hours from mid-transit")
             plt.ylabel("Normalized Flux")
-            plt.title(f"Theoretical Light Curve")
+            plt.title("Theoretical Light Curve of WASP-39b")
             plt.grid(True, linestyle='--', alpha=0.6)
             plt.legend()
             plt.tight_layout()
