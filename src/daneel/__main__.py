@@ -107,6 +107,9 @@ def main():
                     elif (args.best[l] == "tree"):
                         tree = TreemodelClassifier(input_pars[c])
                         tree.evaluate_best_hyperparameters()
+                    elif (args.best[l] == "cnn"):
+                        nne = CnnClassifier(input_pars[c])
+                        nne.evaluate_best_hyperparameters(True)
 
     elif args.atmosphere:
         parser.error("atmospheric characterisation is not implemented yet; use --transit")

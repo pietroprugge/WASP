@@ -11,6 +11,7 @@ from sklearn.model_selection import GridSearchCV
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers, models, regularizers
+from scikeras.wrappers import KerasClassifier
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 import tensorflow.keras.backend as K
 from sklearn.calibration import CalibratedClassifierCV
@@ -293,7 +294,7 @@ class RandomForestClassifier:
                         'max_features': ['sqrt', 'log2']
                      }
         self.load_data()
-        self.train_model()
+        self.model = self.build_random_forest()
         grid_search_rf = GridSearchCV(self.model,
                               param_grid=param_grid, 
                               cv=3,
@@ -573,7 +574,7 @@ class TreemodelClassifier:
                         'ccp_alpha': [0.001, 0.01]
                      }
         self.load_data()
-        self.train_model()
+        self.model = self.build_tree()
         grid_search_tree = GridSearchCV(self.model, 
                               param_grid=param_grid, 
                               cv=3,
@@ -681,7 +682,7 @@ class CnnClassifier:
         
         return X_balanced[idx], y_balanced[idx]
     
-    def load_data(self):
+    def load_data(self,hyper):
         
         
         if not os.path.exists(self.csv_path):
@@ -710,9 +711,8 @@ class CnnClassifier:
         X_train = self.scaler.fit_transform(X_train)
         X_test = self.scaler.transform(X_test)
         
-        
         # Reshape for Conv1D or Conv2D (otherwise we can't use conv1d maxpooling etc because we have a wrong order)
-        if(self.cnn_params.get("cnn_type","cnn1") == "cnn1" or self.cnn_params.get("cnn_type","cnn1") == "cnn3"):
+        if(self.cnn_params.get("cnn_type","cnn1") == "cnn1" or self.cnn_params.get("cnn_type","cnn1") == "cnn3" or hyper == True):
             X_train = X_train.reshape(-1, self.n_bins, 1)
             X_test = X_test.reshape(-1, self.n_bins, 1)
         else:
@@ -738,7 +738,7 @@ class CnnClassifier:
             layers.BatchNormalization(),
             layers.MaxPooling1D(2),
             layers.Dropout(0.3),
-            
+
             layers.Conv1D(128, kernel_size=3, padding='same', activation='relu'),
             layers.BatchNormalization(),
             layers.MaxPooling1D(2),
@@ -1152,7 +1152,7 @@ class CnnClassifier:
   
     def run(self,show,name):
         print(f"Loading CNN data for {name}")
-        self.load_data()
+        self.load_data(False)
         # Puliamo lo stato dei modelli precedenti
         tf.keras.backend.clear_session()
         # Fissiamo il seed per l'inizializzazione dei pesi
@@ -1169,4 +1169,126 @@ class CnnClassifier:
         self.train_model()
         print(f"Evaluating CNN model for {name}") 
         self.evaluate_with_optimal_threshold(show,name)
-        
+
+    def build_CNN1_for_hyperparameters(self, loss="focal", lr=0.0005, dropout_dense=0.2, l2_reg=0.001, activationF = "relu"):
+
+        model = models.Sequential([
+            layers.Input(shape=(self.n_bins, 1)),
+
+            # Feature extraction
+            layers.Conv1D(64, kernel_size=3, padding="same", activation = activationF ),
+            layers.BatchNormalization(),
+            layers.MaxPooling1D(2),
+            layers.Dropout(0.3),
+
+            layers.Conv1D(128, kernel_size=3, padding="same", activation = activationF),
+            layers.BatchNormalization(),
+            layers.MaxPooling1D(2),
+            layers.Dropout(0.3),
+
+            layers.Conv1D(256, kernel_size=3, padding="same", activation = activationF),
+            layers.BatchNormalization(),
+            layers.GlobalAveragePooling1D(),
+            layers.Dropout(0.4),
+
+            # Classification head
+            layers.Dense(512, activation = activationF, kernel_regularizer=regularizers.l2(l2_reg)),
+            layers.Dropout(dropout_dense),
+            layers.Dense(256, activation = activationF, kernel_regularizer=regularizers.l2(l2_reg)),
+            layers.Dropout(dropout_dense),
+            layers.Dense(128, activation = activationF, kernel_regularizer=regularizers.l2(l2_reg)),
+            layers.Dropout(dropout_dense),
+
+            layers.Dense(1, activation="sigmoid"),
+        ])
+
+        if loss == "focal":
+            loss_fn = self.focal_loss()
+        elif loss == "bce":
+            loss_fn = "binary_crossentropy"
+
+        model.compile(
+            optimizer=keras.optimizers.Adam(learning_rate=lr),
+            loss=loss_fn,
+            metrics=[
+                "accuracy",
+                keras.metrics.Precision(name="precision"),
+                keras.metrics.Recall(name="recall"),
+                keras.metrics.AUC(name="auc"),
+            ],
+        )
+
+        return model
+
+
+
+    def evaluate_best_hyperparameters(self, hyper = True):
+
+        self.load_data(hyper)
+        keras.backend.clear_session()
+        tf.keras.utils.set_random_seed(self.random_state)
+
+        def create_keras_model(loss="focal", lr=0.0005, dropout_dense=0.2, l2_reg=0.001, activationF = "relu"):
+            keras.backend.clear_session()
+            return self.build_CNN1_for_hyperparameters(loss, lr, dropout_dense, l2_reg, activationF)
+
+        callbacks = [
+            EarlyStopping(
+                monitor="val_auc",
+                patience=8,
+                restore_best_weights=True,
+                mode="max",
+                verbose=0,
+            ),
+            ReduceLROnPlateau(
+                monitor="val_auc",
+                factor=0.5,
+                patience=6,
+                min_lr=1e-7,
+                mode="max",
+                verbose=0,
+            ),
+            ModelCheckpoint(
+                'best_model_final.keras',
+                monitor='val_auc',
+                save_best_only=True,
+                mode='max',
+                verbose=1
+            )
+        ]
+
+        clf = KerasClassifier(
+            model=create_keras_model,
+            loss="focal",
+            lr=0.0005,
+            dropout_dense=0.2,
+            activationF = "relu",
+            l2_reg=0.001,
+            epochs=self.cnn_params.get("epochs",100),
+            batch_size=32,
+            validation_split=0.2,
+            callbacks=callbacks,
+            verbose=0,
+        )   
+
+        param_grid = {
+            "loss": ["focal", "bce"],
+            "lr": [1e-3,5e-4],
+            #"dropout_dense": [0.2, 0.4],
+            #"l2_reg": [0.001, 0.005],
+            #"activationF": ["relu","gelu"]
+        }
+
+        grid = GridSearchCV(
+            estimator=clf,
+            param_grid=param_grid,
+            cv=3,
+            scoring="recall",
+            n_jobs=1,
+            refit=True,
+        )
+
+        grid.fit(self.X_train, self.y_train)
+
+        print("Best CNN hyperparameters:", grid.best_params_)
+       
